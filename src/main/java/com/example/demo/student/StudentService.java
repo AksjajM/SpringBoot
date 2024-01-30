@@ -1,12 +1,11 @@
 package com.example.demo.student;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,7 +20,7 @@ public class StudentService {
     }
 
     @GetMapping
-    public List<Student> getStudents(){
+    public List<Student> getStudents() {
         return studentRepository.findAll();
     }
 
@@ -29,11 +28,22 @@ public class StudentService {
     public void addNewStudent(Student student) throws Exception {
         Optional<Student> studentOptional = studentRepository.findStudentByEmail(student.getEmail());
 
-        if (studentOptional.isPresent()){
+        if (studentOptional.isPresent()) {
             throw new Exception("Email already exists!");
         }
-        studentRepository.save(student);
 
+        studentRepository.save(student);
         System.out.println(student);
+    }
+
+    @DeleteMapping
+    public void deleteStudentById(Integer studentId) {
+        boolean exists = studentRepository.existsById(String.valueOf(studentId));
+        if (!exists) {
+            throw new IllegalStateException(
+                    "Student with id: " + studentId + " does not exist"
+            );
+        }
+        studentRepository.deleteById(String.valueOf(studentId));
     }
 }
