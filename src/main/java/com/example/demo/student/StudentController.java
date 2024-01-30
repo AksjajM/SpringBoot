@@ -1,5 +1,6 @@
 package com.example.demo.student;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,7 +18,7 @@ public class StudentController {
     }
 
     @GetMapping
-    public List<Student> getStudents(){
+    public List<Student> getStudents() {
         return studentService.getStudents();
     }
 
@@ -27,8 +28,7 @@ public class StudentController {
     }
 
     @DeleteMapping(path = "{studentId}")
-    public void deleteStudentByName(@PathVariable("studentId") Integer studentId){
-        studentService.deleteStudentById(studentId);
+    public void deleteStudentById(@PathVariable("studentId") Integer studentId) throws IllegalAccessException {
+        studentService.deleteStudent(studentId);
     }
-
 }
